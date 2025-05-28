@@ -2,6 +2,8 @@ import SwiftUI
 
 struct CollectionListView: View {
     @State private var isEditing: Bool = false
+    @State private var showingNewCollectionAlert: Bool = false
+    @State private var showFlashcardDetail: Bool = false
     
     var titles = ["Pink", "Yellow", "Blue", "Green"]
     
@@ -9,6 +11,7 @@ struct CollectionListView: View {
         ZStack {
             Color.bgTan
                 .ignoresSafeArea()
+            
             ScrollView {
                 ForEach(titles, id: \.self) { title in
                     NavigationLink {
@@ -20,11 +23,34 @@ struct CollectionListView: View {
                 }
             }
             .padding()
+            
+            NavigationLink(
+                isActive: $showFlashcardDetail,
+                destination: { FlashcardListView(title: nil) },
+                label: {
+                    EmptyView()
+            })
+            // BWORK -- deprecated :(
         }
+        
+        
+        .alert(
+            "Create New Collection",
+            isPresented: $showingNewCollectionAlert
+        ) {
+            Button("Create") {
+                showFlashcardDetail.toggle()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Enter the subject of your new collection")
+        }
+
+        
         .toolbar {
             ToolbarItem {
-                NavigationLink {
-                    FlashcardListView(title: nil)
+                Button {
+                    showingNewCollectionAlert.toggle()
                 } label: {
                     Image(systemName: "plus")
                 }
@@ -38,12 +64,19 @@ struct CollectionListView: View {
                 }
             }
         }
+        
+        
     }
 }
 
 #Preview {
-    CollectionListView()
+    NavigationView {
+        CollectionListView()
+    }
 }
+
+
+
 
 // BWORK -- XX
 struct CollectionToolbar: ToolbarContent {
