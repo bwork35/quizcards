@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct CollectionListView: View {
+    @Environment(ModelData.self) var modelData
+    
     @State private var isEditing: Bool = false
     @State private var showingNewCollectionAlert: Bool = false
     @State private var showFlashcardDetail: Bool = false
     @State private var newSubject: String = ""
     // BWORK -- doesn't reset after creating new -- but maybe after creating newFlashcard, we can be safe to reset
-    
-    var titles = ["Pink", "Yellow", "Blue", "Green"]
     
     var body: some View {
         ZStack {
@@ -15,11 +15,11 @@ struct CollectionListView: View {
                 .ignoresSafeArea()
             
             ScrollView {
-                ForEach(titles, id: \.self) { title in
+                ForEach(modelData.collections, id: \.self) { collection in
                     NavigationLink {
-                        FlashcardListView(title: title)
+                        FlashcardListView(collection: collection)
                     } label: {
-                        CollectionCellView(isEditing: $isEditing, title: title)
+                        CollectionCellView(isEditing: $isEditing, title: collection.subject)
                     }
                     .foregroundStyle(.primary)
                 }
@@ -29,7 +29,7 @@ struct CollectionListView: View {
             NavigationLink(
                 isActive: $showFlashcardDetail,
                 destination: {
-                    FlashcardListView(title: newSubject)
+                    FlashcardListView(collection: createNewCollection())
                 },
                 label: {}
             )
@@ -74,34 +74,47 @@ struct CollectionListView: View {
         
         
     }
+    
+    private func createNewCollection() -> Collection {
+        let newCollection = Collection(subject: newSubject)
+        
+        // modelData.collections.insert(newCollection, at: 0)
+
+        return newCollection
+    }
 }
 
 #Preview {
     NavigationView {
         CollectionListView()
+            .environment(ModelData())
     }
 }
+
+
+
+
 
 
 
 
 // BWORK -- XX
-struct CollectionToolbar: ToolbarContent {
-    var body: some ToolbarContent {
-        ToolbarItem {
-            NavigationLink {
-                FlashcardListView(title: nil)
-            } label: {
-                Image(systemName: "plus")
-            }
-        }
-        
-        ToolbarItem(placement: .topBarLeading) {
-            Button {
-                print("EDIT !!")
-            } label: {
-                Text("Edit")
-            }
-        }
-    }
-}
+//struct CollectionToolbar: ToolbarContent {
+//    var body: some ToolbarContent {
+//        ToolbarItem {
+//            NavigationLink {
+//                FlashcardListView(collection: ModelData().collections.first!)
+//            } label: {
+//                Image(systemName: "plus")
+//            }
+//        }
+//        
+//        ToolbarItem(placement: .topBarLeading) {
+//            Button {
+//                print("EDIT !!")
+//            } label: {
+//                Text("Edit")
+//            }
+//        }
+//    }
+//}

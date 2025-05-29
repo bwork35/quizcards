@@ -13,7 +13,7 @@ struct CardStrings {
     static let collectionReferenceKey = "collection"
 }
 
-class Flashcard {
+struct Flashcard: Hashable {
     var frontString: String?
     var backString: String?
     var frontIsPKImage: Bool
@@ -84,7 +84,7 @@ class Flashcard {
 }
 
 extension Flashcard {
-    convenience init?(ckRecord: CKRecord) {
+    init?(ckRecord: CKRecord) {
         guard let frontIsPKImage = ckRecord[CardStrings.frontPKBoolKey] as? Bool,
             let backIsPKImage = ckRecord[CardStrings.backPKBoolKey] as? Bool,
             let timestamp = ckRecord[CardStrings.timestampKey] as? Date else {return nil}

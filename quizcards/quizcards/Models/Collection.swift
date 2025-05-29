@@ -8,7 +8,7 @@ struct FlashStrings {
     fileprivate static let timestampKey = "timestamp"
 }
 
-class Collection {
+struct Collection: Hashable {
     var subject: String
     var flashcards: [Flashcard]
     var timestamp: Date
@@ -24,7 +24,7 @@ class Collection {
 }
 
 extension Collection {
-    convenience init?(ckRecord: CKRecord) {
+    init?(ckRecord: CKRecord) {
         guard let subject = ckRecord[FlashStrings.subjectKey] as? String,
             let timestamp = ckRecord[FlashStrings.timestampKey] as? Date else {return nil}
         
