@@ -2,7 +2,6 @@ import SwiftUI
 
 struct CollectionCellView: View {
     @Binding var isEditing: Bool
-    
     let title: String
     
     var body: some View {
@@ -23,11 +22,14 @@ struct CollectionCellView: View {
                 
                 Text(title)
                     .font(.title)
+                    .frame(width: 200)
+                    .multilineTextAlignment(.center)
             }
         }
     }
 }
+// BWORK -- test for really long names that expand vertically
 
 #Preview {
-    CollectionCellView(isEditing: .constant(false), title: "pink")
+    CollectionCellView(isEditing: .constant(false), title: "States and Capitals")
 }

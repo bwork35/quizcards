@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct FlashcardListView: View {
-    let title: String?
+    let collection: Collection
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(title ?? "Subject")
+                Text(collection.subject)
                     .font(.largeTitle)
                     .foregroundStyle(Color("titleRed"))
                     .padding(.trailing, 8)
@@ -64,5 +64,6 @@ struct FlashcardListView: View {
 }
 
 #Preview {
-    FlashcardListView(title: "Pink")
+    let collection = ModelData().collections.first!
+    FlashcardListView(collection: collection)
 }
