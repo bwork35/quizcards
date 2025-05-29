@@ -4,6 +4,8 @@ struct CollectionListView: View {
     @State private var isEditing: Bool = false
     @State private var showingNewCollectionAlert: Bool = false
     @State private var showFlashcardDetail: Bool = false
+    @State private var newSubject: String = ""
+    // BWORK -- doesn't reset after creating new -- but maybe after creating newFlashcard, we can be safe to reset
     
     var titles = ["Pink", "Yellow", "Blue", "Green"]
     
@@ -26,10 +28,11 @@ struct CollectionListView: View {
             
             NavigationLink(
                 isActive: $showFlashcardDetail,
-                destination: { FlashcardListView(title: nil) },
-                label: {
-                    EmptyView()
-            })
+                destination: {
+                    FlashcardListView(title: newSubject)
+                },
+                label: {}
+            )
             // BWORK -- deprecated :(
         }
         
@@ -38,10 +41,14 @@ struct CollectionListView: View {
             "Create New Collection",
             isPresented: $showingNewCollectionAlert
         ) {
+            TextField("Subject", text: $newSubject)
             Button("Create") {
                 showFlashcardDetail.toggle()
             }
-            Button("Cancel", role: .cancel) {}
+            .disabled(newSubject.isEmpty)
+            Button("Cancel", role: .cancel) {
+                newSubject = ""
+            }
         } message: {
             Text("Enter the subject of your new collection")
         }
